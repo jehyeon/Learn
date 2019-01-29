@@ -1,0 +1,14 @@
+{
+  "name": "electron-starter-tutorial",
+  "version": "1.0.0",
+  "description": "try it",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Lee,Jehyeon",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^4.0.2"
+  }
+}

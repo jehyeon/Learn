@@ -3,7 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=node,python
 
 # others
-.lock
+yarn.lock
 
 ### Node ###
 # Logs
