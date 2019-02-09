@@ -1,4 +1,4 @@
-import json
+﻿import json
 
 DEBUG_MODE = False
 
@@ -9,6 +9,7 @@ def main():
         'models': [],
         'trainings': [],
         'views': [],
+        'codes': [],
         'others': []
     }
 
@@ -61,7 +62,12 @@ def main():
                     diffs['views'].append({
                         'file_name': folder_name + data.replace('\n',''),
                         'line_diff': datas[index+1].replace('\n','')
-                    })    
+                    })
+                elif 'js' in data:
+                    diffs['codes'].append({
+                        'file_name': folder_name + data.replace('\n',''),
+                        'line_diff': datas[index+1].replace('\n','')
+                    })
                 else:
                     diffs['others'].append({
                         'file_name': data.replace('\n',''),
