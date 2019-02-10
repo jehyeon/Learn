@@ -1,2 +1,2 @@
 # learn
-for study
+for study 
