@@ -7,7 +7,7 @@ RAW_DATAS_FOLDER = './raw_datas/'
 
 # .xlsx data is from http://rtdown.molit.go.kr/rtms/rqs/initRtRentList.do
 # raw_data_files = os.listdir(RAW_DATAS_FOLDER)
-raw_data_files = ['오피스텔(매매)_실거래가_20190211.xlsx']      # for test
+raw_data_files = ['오피스텔(매매)_실거래가_20190211.xlsx','아파트(매매)_실거래가_20190212141947.xlsx']      # for test
 
 result = {}
 for raw_data in raw_data_files:
@@ -37,24 +37,20 @@ for raw_data in raw_data_files:
     result[key]['search_option'] = search_opt
     result[key]['datas'] = info
 
+    print(search_opt)
     # temp
     temp = {}
     for data in info[1:]:
-        try:
-            # for check
-            if temp[data[0].split(' ')[1]]['tot_price'] == 0:
-                pass
-        except:
-            temp[data[0].split(' ')[1]] = {}
-            temp[data[0].split(' ')[1]]['tot_price'] = 0
-            temp[data[0].split(' ')[1]]['index'] = 0
-
-        finally:
+        if data[0].split(' ')[1] in temp.keys():
             temp[data[0].split(' ')[1]]['tot_price'] += float(''.join(data[8].split(','))) / float(data[5])
             temp[data[0].split(' ')[1]]['index'] += 1
+        else:
+            temp[data[0].split(' ')[1]] = {}
+            temp[data[0].split(' ')[1]]['tot_price'] = float(''.join(data[8].split(','))) / float(data[5])
+            temp[data[0].split(' ')[1]]['index'] = 1
 
     for key in temp.keys():
-        print(key + ' ' + str(temp[key]['tot_price'] / temp[key]['index']))
+        print(key + ' ' + str(int(temp[key]['tot_price'] / temp[key]['index'])))
 
 # 나중에 데이터 덮어쓰기가 아닌 업데이트로 수정 예정
 # with open('datas.json', 'w', encoding='utf-8') as f:
