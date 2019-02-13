@@ -9,6 +9,9 @@ var get_color = (value, sum=undefined, price=0) => {
     else {
         if (price != 0) {
             const set = ((sum / price).toFixed(1) * 150).toString();
+            if (price == -1) {
+                return '#EEE';
+            }
             return 'rgb(255,' + set + ',' + set + ')';
         }
     }

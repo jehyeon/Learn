@@ -3,21 +3,19 @@ import './Grid.css';
 import get_color from './utils/Color'
 
 class Grid extends Component {
-    state = {
-        mode: 1
-    }
     render() {
-        const { type, areas, prices } = this.props;
+        const { type, areas, prices, mode } = this.props;
+        const average = prices.reduce((a,b) => a+b, 0) / prices.length - 1;
         
         const grid = areas.map( line => (                    
             <ul className="block_line">
                 {line.map(block => {
                     const bg = { 'background-color': '#AAA'};
-                    if (this.state.mode == 0) {
+                    if (mode == '0') {
                         bg['background-color'] = get_color(block)
                     }
                     else {
-                        bg['background-color'] = get_color(block, 622, prices[block])
+                        bg['background-color'] = get_color(block, average, prices[block])
                     }
 
                     return (
@@ -25,7 +23,7 @@ class Grid extends Component {
                             area={block} 
                             className={type} 
                             // price={prices[block]} 
-                            mode={this.state.mode}
+                            mode={mode}
                             style={bg}
                         />
                     )
