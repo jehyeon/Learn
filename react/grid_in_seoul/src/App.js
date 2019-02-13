@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import { type, values } from './seoul_grid.json';
+
+import { type, values } from './json/seoul_grid.json';
+import area_id from './json/seoul_id.json';
+import { data } from './json/seoul_price.json';
+
 import Grid from './Grid';
 
 class App extends Component {
@@ -8,11 +12,11 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Grid in Seoul</h1>
-        <form>
+        {/* <form>
           <button>아파트</button>
           <button>오피스텔</button>
-        </form>
-        <Grid type={ type } values={ values } />
+        </form> */}
+        <Grid type={ type } areas={ values } prices={data.prices}/>
       </div>
     );
   }

@@ -3,20 +3,21 @@
     margin: 0;
 }
 
-.grid-wrapper {
+.grid {
     /* li에 따라 가변되어야 함 */
     max-width: 560px;           
     min-width: 560px;
 }
 
-.grid-wrapper p {
+.grid p {
     word-break:break-all;
 }
-ul {
+
+.block_line {
     list-style: none;
 }
 
-ul li {
+.block_line li {
     float: left;
     width: 10px;
     height: 10px;
@@ -26,12 +27,11 @@ ul li {
 
     margin: 1.5px;
     margin-right: 4px;
-    border-radius: 50%;
 
     cursor: pointer;
 }
 
-ul li:hover {
+.block_line li:hover {
 
     margin: 0.5px;
     margin-right: 3px;
@@ -42,6 +42,13 @@ ul li:hover {
     background-color: #AAA;
 }
 
+.block_line li[area='0'] {
+    opacity: 0;
+}
+
 .circle {
     border-radius: 50%;
+}
+
+.square {
 }
