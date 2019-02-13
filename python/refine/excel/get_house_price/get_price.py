@@ -7,7 +7,7 @@ RAW_DATAS_FOLDER = './raw_datas/'
 
 # .xlsx data is from http://rtdown.molit.go.kr/rtms/rqs/initRtRentList.do
 # raw_data_files = os.listdir(RAW_DATAS_FOLDER)
-raw_data_files = ['오피스텔(매매)_실거래가_20190213.xlsx']      # for test
+raw_data_files = ['아파트(매매)_실거래가_20190212141947.xlsx']      # for test
 
 result = {}
 for raw_data in raw_data_files:
