@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import './App.css'
 
 import { type, values } from './json/seoul_grid.json'
-// import area_id from './json/seoul_id.json'
+import area_id from './json/seoul_id.json'
 import { data } from './json/seoul_price.json'
 
-import Grid from './Grid';
+import Grid from './Grid'
+import Ranking from './Ranking'
 
 class App extends Component {
   state = {
@@ -37,6 +38,7 @@ class App extends Component {
         <Grid type={ type } areas={ values } prices={this.state.prices} mode={this.state.mode}/>
 
         {/* 지역 리스트 뷰 (우측 fixed 리스트) */}
+        <Ranking prices={this.state.prices}/>
         {/*  */}
 
         {/* 기간 및 하우스 타입 설정가능한 form 컴포넌트로 수정 예정 */}
