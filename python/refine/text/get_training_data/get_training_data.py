@@ -21,7 +21,7 @@ LOCALES = 'ko-KR'
 TRAINGS = '/training'
 SAVE_ROUTE = './datas'
 
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 # Make config.ini
 def make_config(_config_filename):
@@ -64,7 +64,7 @@ def load_datas(_file_name):
                 if end < 0:
                     end = line.rfind(')')
                 if DEBUG_MODE: print(line[start:end])
-                utterances.append(line[start:end+1])
+                utterances.append(line[start:end])
 
     return utterances
 
@@ -105,11 +105,37 @@ def save_datas(_datas, _save_route):
     wsl = []
     sheet_num = 0
     
-    for index, data in enumerate(_datas):
-        if DEBUG_MODE: print(sheet_num, 'A' + str(index+1))
-        wsl[sheet_num]['A' + str(index+1)] = data
+    wsl.append(wb.create_sheet('datas', sheet_num))
 
-    wb.save(_save_route + '/test.xlxs')
+    for index, data in enumerate(_datas):
+        # if DEBUG_MODE: print(sheet_num, 'A' + str(index+1))
+        wsl[sheet_num]['A' + str(index+1)] = get_goal(data)
+        wsl[sheet_num]['B' + str(index+1)] = data
+        wsl[sheet_num]['C' + str(index+1)] = get_nl(data)
+
+    if not os.path.isdir(_save_route):
+        os.mkdir(_save_route)
+    wb.save(_save_route + '/data.xlsx')
+
+# Refine datas
+def get_goal(_utterance):
+    return _utterance[_utterance.find(':')+1:_utterance.find(']')]
+
+def get_nl(_utterance):
+    goal = _utterance
+
+    excepted_symbols = ['(', ')', '{', '}']
+    
+    for symbol in excepted_symbols:
+        goal = goal.replace(symbol, '')
+
+    while '[' in goal:
+        start = goal.find('[')
+        end = goal.find(']')
+        goal = goal[:start] + goal[end+1:]
+
+    return goal.strip()
+
 
 '''
     Main process
