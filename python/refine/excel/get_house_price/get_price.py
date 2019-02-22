@@ -3,23 +3,22 @@ import datetime
 import openpyxl
 import json
 
+DEBUG_MODE = False
 RAW_DATAS_FOLDER = './raw_datas/'
 
 # .xlsx data is from http://rtdown.molit.go.kr/rtms/rqs/initRtRentList.do
-# raw_data_files = os.listdir(RAW_DATAS_FOLDER)
-raw_data_files = ['아파트(매매)_실거래가_20190212141947.xlsx']      # for test
+raw_data_files = os.listdir(RAW_DATAS_FOLDER)
+# raw_data_files = ['오피스텔(전월세)_실거래가_20190222.xlsx']      # for test
 
-result = {}
+result = {'datas': []}
 for raw_data in raw_data_files:
-    now = datetime.datetime.now()
-    key = '{0}{1}-{2}{3}{4}'.format(now.month, now.day, now.hour, now.minute, now.second)
 
     # Active Sheet 얻기
     wb = openpyxl.load_workbook(RAW_DATAS_FOLDER + raw_data)
     ws = wb.active
 
-    datas = []
     # row 데이터 추출
+    datas = []
     for cols in ws.rows:
         if type(cols) == type(()):
             datas.append([col.value.strip() for col in cols if type(col.value) == str])
@@ -32,26 +31,40 @@ for raw_data in raw_data_files:
         if len(data) == 1 and ':' in str(data):
             search_opt[data[0].split(':')[0].strip()] = data[0].split(':')[1].strip()
         elif len(data) > 1: info.append(data)
-    
-    result[key] = {}
-    result[key]['search_option'] = search_opt
-    result[key]['datas'] = info
 
-    print(search_opt)
-    # temp
-    temp = {}
-    for data in info[1:]:
-        if data[0].split(' ')[1] in temp.keys():
-            temp[data[0].split(' ')[1]]['tot_price'] += float(''.join(data[8].split(','))) / float(data[5])
-            temp[data[0].split(' ')[1]]['index'] += 1
+    # 데이터 정제
+    # 매매 / raw[5]: 전용면적, raw[8]: 거래금액(만원)
+    # 전월세 / raw[5]: 전월세 구분, raw[6]: 전용면적, raw[9]: 보증금(만원), raw[10]: 월세(만원)
+    prices = {}
+    if '매매' in search_opt['실거래 구분']: pr_index, ar_index = 8, 5
+    elif '전월세' in search_opt['실거래 구분']: pr_index, ar_index = 9, 6
+
+    for raw in info[1:]:
+        # 월세는 계산 안함
+        if raw[5] == '월세': pass
         else:
-            temp[data[0].split(' ')[1]] = {}
-            temp[data[0].split(' ')[1]]['tot_price'] = float(''.join(data[8].split(','))) / float(data[5])
-            temp[data[0].split(' ')[1]]['index'] = 1
+            area_name = raw[0].split()[1]
+            if not area_name in prices.keys():
+                prices[area_name] = []
+            prices[area_name].append(float(raw[pr_index].replace(',',''))/float(raw[ar_index]))
 
-    for key in temp.keys():
-        print(key + ' ' + str(int(temp[key]['tot_price'] / temp[key]['index'])))
+    for area_name in prices.keys():
+        prices[area_name] = int(sum(prices[area_name])/len(prices[area_name]))
+    
+    if DEBUG_MODE:
+        print(search_opt)
+        print(prices)
 
-# 나중에 데이터 덮어쓰기가 아닌 업데이트로 수정 예정
-# with open('datas.json', 'w', encoding='utf-8') as f:
-#     json.dump(result, f)
+    result['datas'].append({
+        'type': search_opt['실거래 구분'].split('(')[0],
+        'period': search_opt['계약일자'],
+        'category': search_opt['실거래 구분'].split('(')[1][:-1].replace('월',''),
+        'prices': prices
+    })
+
+    if DEBUG_MODE:
+        print(result['datas'])
+    print(result['datas'])
+    
+with open('datas.json', 'w', encoding='utf-8') as f:
+    json.dump(result, f, sort_keys=True, indent=4)

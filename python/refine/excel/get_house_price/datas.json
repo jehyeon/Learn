@@ -1,0 +1,36 @@
+{
+    "datas": [
+        {
+            "category": "\uc804\uc138",
+            "period": "20180101 ~ 20181231",
+            "prices": {
+                "\uac15\ub0a8\uad6c": 737,
+                "\uac15\ub3d9\uad6c": 593,
+                "\uac15\ubd81\uad6c": 389,
+                "\uac15\uc11c\uad6c": 600,
+                "\uad00\uc545\uad6c": 521,
+                "\uad11\uc9c4\uad6c": 618,
+                "\uad6c\ub85c\uad6c": 478,
+                "\uae08\ucc9c\uad6c": 548,
+                "\ub178\uc6d0\uad6c": 333,
+                "\ub3c4\ubd09\uad6c": 402,
+                "\ub3d9\ub300\ubb38\uad6c": 475,
+                "\ub3d9\uc791\uad6c": 525,
+                "\ub9c8\ud3ec\uad6c": 700,
+                "\uc11c\ub300\ubb38\uad6c": 711,
+                "\uc11c\ucd08\uad6c": 768,
+                "\uc131\ub3d9\uad6c": 599,
+                "\uc131\ubd81\uad6c": 448,
+                "\uc1a1\ud30c\uad6c": 707,
+                "\uc591\ucc9c\uad6c": 528,
+                "\uc601\ub4f1\ud3ec\uad6c": 607,
+                "\uc6a9\uc0b0\uad6c": 704,
+                "\uc740\ud3c9\uad6c": 490,
+                "\uc885\ub85c\uad6c": 571,
+                "\uc911\uad6c": 652,
+                "\uc911\ub791\uad6c": 476
+            },
+            "type": "\uc624\ud53c\uc2a4\ud154"
+        }
+    ]
+}
