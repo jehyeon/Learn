@@ -1,0 +1,14 @@
+{
+  "name": "electron-first-app",
+  "version": "0.0.1",
+  "description": "for study",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Lee, Jehyeon",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^4.0.6"
+  }
+}
