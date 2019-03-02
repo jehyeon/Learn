@@ -1,0 +1,15 @@
+{
+  "name": "electron-todo",
+  "version": "0.1.0",
+  "description": "A simple educational todo app",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Lee, Jehyeon",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^4.0.6",
+    "electron-store": "^2.0.0"
+  }
+}
