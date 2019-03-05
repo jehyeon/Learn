@@ -19,7 +19,7 @@ ipcRenderer.on('todos', (event, todos) => {
 
     // create html string
     const todoItems = todos.reduce((html, todo) => {
-        html += '<li class="todo-item">${todo}</li>'
+        html += `<li class="todo-item">${todo}</li>`
 
         return html
     }, '')

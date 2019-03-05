@@ -1,3 +1,5 @@
+'use strict'
+
 const Store = require('electron-store')
 
 class DataStore extends Store {
@@ -12,7 +14,7 @@ class DataStore extends Store {
     saveTodos () {
         // save todos to JSON file
         this.set('todos', this.todos)
-
+        
         // returning 'this' allows method chaining
         return this
     }
@@ -26,7 +28,7 @@ class DataStore extends Store {
     
     addTodo (todo) {
         // merge the existing todos with the new todo
-        this.todo = [ ...this.todos, todo ]
+        this.todos = [ ...this.todos, todo ]
 
         return this.saveTodos()
     }

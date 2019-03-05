@@ -7,8 +7,10 @@ const { app, ipcMain } = require('electron')
 const Window = require('./Window')
 const DataStore = require('./DataStore')
 
+require('electron-reload')(__dirname)
+
 // create a new todo store name "Todos Main"
-const todosData = new DataStore({name: 'Todos Main'})
+const todosData = new DataStore({name: 'Todos Main2'})
 
 function main () {
     // todo list window
@@ -22,6 +24,26 @@ function main () {
     // TODO: put these events into their own file
     mainWindow.once('show', () => {
         mainWindow.webContents.send('todos', todosData.todos)
+    })
+
+    // create add todo window
+    ipcMain.on('add-todo-window', () => {
+        // if addTodoWin does not already exist
+        if (!addTodoWin) {
+            // create a new add todo window
+            addTodoWin = new Window({
+                file: path.join('renderer', 'add.html'),
+                width: 400,
+                height: 400,
+                // close with the main window
+                parent: mainWindow                
+            })
+
+            // clean up 
+            addTodoWin.on('closed', () => {
+                addTodoWin = null
+            })
+        }
     })
 
     // add-todo from add todo window
