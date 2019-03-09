@@ -1,0 +1,1 @@
+[출처](https://velog.io/@velopert/Redux-2-리액트-없이-쓰는-리덕스-cijltabbd7)
