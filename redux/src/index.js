@@ -26,7 +26,7 @@ const initialState = {
 
 // 리듀서 함수 정의
 function reducer(state = initialState, action) {
-    switch (action.stype) {
+    switch (action.type) {
         case TOGGLE_SWITCH:
             return {
                 ...state,               // 기존 state 값을 유지
