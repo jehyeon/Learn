@@ -303,4 +303,29 @@ function reducer(state, action) {
 
 *완성된 소스 ./reducers.js*
 
+### 3. 스토어
+"무엇이 일어날지"를 나타내는 `액션`과 액션에 따라 상태를 수정하는 `리듀서`까지 작성한 뒤에는 이들을 가져오는 `스토어`를 작성해야 한다.
+
+스토어는 아래와 같은 일들을 한다.
+- 애플리케이션의 상태를 저장
+- getState()를 통해 상태에 접근
+- dispatch(action)를 통해 상태를 수정
+- subscribe(listener)를 통해 리스너를 등록
+
+Redux 애플리케이션에는 단 하나의 스토어만 가질 수 있다. 만약 데이터를 다루는 로직을 쪼개고 싶다면, 여러 개의 스토어 대신 리듀서 조합을 사용하도록 하자
+
+`combineReducers()`를 통해 여러 리듀서를 하나로 합쳤으니, 이것을 가져와 `createStore()`로 넘기면 된다.
+```
+import { createStore } from 'redux';
+import todoApp from './reducers';
+
+let store = createStore(todoApp);
+```
+`createStore()의 두번째 인수로 초기 상태를 지정해줄 수도 있다. 이는 서버에서 실행 중인 Redux 애플리케이션의 상태와 일치하도록 클라이언트의 상태를 채워줄 때 유용하다.
+```
+let store = createStore(todoApp, window.STATE_FROM_SERVER);
+```
+
+완성된 소스 ./index.js
+
 [출처](https://deminoth.github.io/redux/basics/Reducers.html)
