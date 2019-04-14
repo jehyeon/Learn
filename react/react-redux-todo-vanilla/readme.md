@@ -329,3 +329,75 @@ let store = createStore(todoApp, window.STATE_FROM_SERVER);
 완성된 소스 ./index.js
 
 [출처](https://deminoth.github.io/redux/basics/Reducers.html)
+
+### 4. 데이터 흐름
+Redux의 아키텍쳐는 엄격한 일방향 데이터 흐름에 따라 전개된다. 애플리케이션 내의 모든 데이터가 같은 생명주기 패턴을 따르기 때문에, 앱의 로직을 좀 더 예측 가능하게 하고 이해하기 쉽게 만든다.
+
+#### 모든 Redux 앱에서의 데이터는 아래와 같이 4단계의 생명 주기를 따른다.
+1. store.dispatch(action)을 호출
+액션은 무엇이 일어날지 기술하는 보통의 오브젝트다. 
+```
+{ type: 'LIKE_ARTICLE', articleId: 42};
+{ type: 'FETCH_USER_SUCCESS', response: { id: 3, name: 'Megan' } };
+{ type: 'ADD_TODO', text: 'Read the Redux docs.' };
+```
+`store.dispatch(action)`은 앱 내의 어디서나 호출될 수 있다. (컴포넌트나 XHR 콜백, 심지어 일정한 간격으로도)
+
+2. Redux 스토어가 리듀서 함수들을 호출
+스토어는 리듀서에 현재의 상태와 실행되는 액션 두 가지 인수를 넘긴다.
+```
+// 애플리케이션의 현재 상태(할일 목록과 선택된 필터)
+let previousState = {
+    visibleTodoFilter: 'SHOW_ALL',
+    todos: [{
+        text: 'Read the docs.',
+        complete: false
+    }]
+};
+
+let action = {
+    type: 'ADD_TODO',
+    text: 'Understand the flow.'
+};
+
+// 리듀서가 다음 상태를 반환함
+let nextState = todoApp(previousState, action);
+```
+
+3. 루트 리듀서로 각 리듀서의 출력을 합쳐서 하나의 상태 트리를 만듦
+Redux는 루트 리듀서를 각각 상태 트리의 가지 하나씩 다룰 수 있도록 `combineReducers()` 헬퍼 함수를 제공한다.
+
+`combineReducers()`의 작동 방식은 아래와 같다. 하나는 할일 목록을 위한 것이고, 하나는 선택된 필터 설정을 위한 것이다.
+
+```
+function todos(state = [], action) {
+    // Somehow calculate it
+    return nextState;
+}
+
+function visibleTodoFilter(state = 'SHOW_ALL', action) {
+    // Somehow calculate it
+    return nextState;
+}
+
+let todoApp = combineReducers({
+    todos,
+    visibleTodoFilter
+});
+```
+`todoApp`을 호출 시 `combineReducers`가 아래 두 리듀서 호출한다.
+```
+let nextTodos = todos(state.todos, action);
+let nextVisibleTodoFilter = visibleTodoFilter(state.visibleTodoFilter, action);
+```
+그리고 두 결과를 합펴서 하나의 상태 트리로 만들어진다. 
+```
+return {
+    todos: nextTodos,
+    visibleTodoFilter: nextVisibleTodoFilter
+};
+```
+4. Redux 스토어가 루트 리듀서에 의해 반환된 상태 트리를 저장
+새 트리가 앱의 다음 상태다. `store.subcribe(listener)`를 통해 등록된 모든 리스너가 불러지고 이들은 현재 상태를 얻기 위해 `store.getState()`를 호출한다.
+
+이제 newState를 반영하여 UI 변경된다. React Redux로 바인딩을 했다면 이 시점에서 component.setState(newState)가 호출된다.
