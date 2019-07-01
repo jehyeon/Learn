@@ -328,8 +328,6 @@ let store = createStore(todoApp, window.STATE_FROM_SERVER);
 
 완성된 소스 ./index.js
 
-[출처](https://deminoth.github.io/redux/basics/Reducers.html)
-
 ### 4. 데이터 흐름
 Redux의 아키텍쳐는 엄격한 일방향 데이터 흐름에 따라 전개된다. 애플리케이션 내의 모든 데이터가 같은 생명주기 패턴을 따르기 때문에, 앱의 로직을 좀 더 예측 가능하게 하고 이해하기 쉽게 만든다.
 
@@ -401,3 +399,151 @@ return {
 새 트리가 앱의 다음 상태다. `store.subcribe(listener)`를 통해 등록된 모든 리스너가 불러지고 이들은 현재 상태를 얻기 위해 `store.getState()`를 호출한다.
 
 이제 newState를 반영하여 UI 변경된다. React Redux로 바인딩을 했다면 이 시점에서 component.setState(newState)가 호출된다.
+
+### 5. React와 함께 사용하기
+#### Presentational 컴포넌트 설게하기
+- AddTodo는 버튼이 달린 input 필드
+    + onAddClick(text: string)
+- TodoList는 표시 중인 할일 목록
+    + todos: Array는 { text, completed } 형태의 할일 배열
+    + onTodoClick(index: number)
+- Todo는 할일 하나
+    + text: strng, 보여줄 텍스트
+    + completed: boolean, 할일이 완료되었는지에 대한 여부
+    + onClick()
+- Link
+- Footer는 할일 필터를 사용자가 바꿀 수 있게끔 해주는 컴포넌트
+- App은 다른 모든 컴포넌트를 렌더링하는 최상단 컴포넌트
+
+이 컴포넌트들은 모두 *외양*을 담당하지만 데이터가 어디에서 오는 것인지, 또 어떻게 데이터를 변경해야 하는지는 알지 못한다. 그저 주어진 것을 표시하기만 한다. 만약 Redux가 아닌 다른 무언가를 쓰게 된다면 이 모든 컴포넌트들을 그대로 유지할 수 있다. Redux에 대한 의존성이 없기 때문이다.
+
+#### Container 컴포넌트 설계하기
+Presentational 컴포넌트를 Redux에 연결하기 위해서는 Container 컴포넌트가 필요하다. 에를 들어, `TodoList` presentational 컴포넌트는 `VisibleTodoList`와 같은 container 컴포넌트를 필요로 한다. `VisibleTodoList`는 Redux 스토어의 변경사항을 구독하고 현재 필터를 어떻게 적용해야 할 지를 아는 컴포넌트다. 필터를 변경하기 위해, `FilterLink` 컴포넌트를 만들어서 `Link` 컴포넌트를 렌더링하고 여기에 클릭이 일어날 때마다 적절한 액션을 파견해 줄 것이다.
+- `VisibleTodoList` 컴포넌트는 현재 필터 상태에 따라 할일 목록을 필터링해서 `TodoList` 컴포넌트를 표시한다.
+- `FilterLink` 컴포넌트는 현재 필터 상태를 가져와서 `Link` 컴포넌트를 표시한다.
+    + filter: string 속성에는 이 컴포넌트가 어떤 필터를 나타내는지 저장
+
+#### 그 밖의 컴포넌트 설계하기
+어느 컴포넌트로 만들어야할 지 결정하기 어려운 경우가 있다. 예를 들어, 다음과 같이 폼과 기능이 밀접하게 결합되어 있는 경우이다.
+- AddTodo 컴포넌트는 'Add' 버튼이 있는 입력 필드이다.
+
+아주 작은 컴포넌트의 경우 외양과 논리구조가 섞여있어도 괜찮다. 컴포넌트가 커짐에 따라, 그것을 어떻게 쪼개야 할 지 더 명확해질 것이므로, 일단은 섞은 채로 만든다.
+
+#### Presentational Component 구현하기
+우리는 지역 상태나 생애주기(lifecycle) 메소드가 필요하지 않은 경우 항상 상태를 갖지 않는 함수형 컴포넌트를 만들 것이다. 만약 지역 상태나 생애주기 메소드, 혹은 성능 최적화가 필요할 때가 오면 클래스로 바꿔주면 된다.
+
+component/Todo.js
+```
+import React from 'react';
+import PropTypes from 'prop-types';
+
+const Todo = ({ onClick, completed, text }) => (
+    <li
+        onClick={onClick}
+        style={{
+        textDecoration: completed ? 'line-through': 'none'
+        }}
+    >
+        {text}
+    </li>
+);
+
+Todo.propTypes = {
+    onClick: PropTypes.func.isRequired,
+    completed: PropTypes.bool.isRequired,
+    text: PropTypes.string.isRequired
+};
+
+export default Todo;
+```
+
+components/TodoList.js
+```
+import React from 'react';
+import PropTypes from 'prop-types';
+import Todo from './Todo';
+
+const TodoList = ({ todos, onTodoClick }) => {
+    <ul>
+        {todos.map((todo, index) => (
+            <Todo key={index} {...todo} onClick={() => onTodoClick(index)} />
+        ))}
+    </ul>
+}
+
+TodoList.propTypes = {
+    todos: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            completed: PropTypes.bool.isRequired,
+            text: PropTypes.string.isRequired
+        }).isRequired
+    ).isRequired,
+    onTodoClick: PropTypes.func.isRequired
+};
+
+export default TodoList;
+```
+
+component/Link.js
+```
+import React from 'react';
+import PropTypes from 'prop-types';
+
+const Link = ({ active, children, onClick }) => {
+    if (active) {
+        return <span>{children}</span>
+    }
+
+    return (
+        <a
+            href=''
+            onClick={e => {
+                e.preventDefault()
+                onClick()
+            }}
+        >
+            {children}
+        </a>
+    )
+}
+
+Link.propTypes = {
+    active: PropTypes.bool.isRequired,
+    children: PropType.node.isRequired,
+    onClick: PropType.func.isRequired
+};
+
+export default Link;
+```
+
+component/Footer.js
+```
+import React from 'react';
+import FilterLink from '../container/FilterLink';
+
+const Footer = () => {
+    <p>
+        Show:
+        {' '}
+        <FilterLink filter='SHOW_ALL'>
+            All
+        </FilterLink>
+        {', '}
+        <FilterLink filter='SHOW_ACTIVE'>
+            Active
+        </FilterLink>
+        {', '}
+        <FilterLink filter='SHOW_COMPLETED'>
+            Completed
+        </FilterLink>
+    </p>
+}
+
+export default Footer;
+```
+
+#### Component 컴포넌트 구현하기
+~
+
+[출처](https://deminoth.github.io/redux/basics/Reducers.html)
