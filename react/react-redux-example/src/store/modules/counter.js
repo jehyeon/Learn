@@ -29,14 +29,10 @@ export default function counter(state = initialStore, action) {
                 number: state.number + 1,
             };
         case DECREMENT:
-            if (state.number > 0) {
-                return {
-                    ...state,
-                    number: state.number - 1,
-                };
-            } else {
-                return state;
-            }
+            return {
+                ...state,
+                number: state.number - 1,
+            };
         default:
             return state;
     }
