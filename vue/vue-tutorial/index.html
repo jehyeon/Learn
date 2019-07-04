@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vue tutorial</title>
+    <style>
+      h3 {
+        color: #663544;
+      }
+      div {
+        padding: 0 0 15px 15px;
+      }
+      .guide {
+        background: #663544;
+        padding: 3px 20px 3px 20px;
+        border-radius: 15px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="https://kr.vuejs.org/v2/guide/index.html">From tutorial</a>
+
+    <h3>1.</h3>
+    <div id="app">
+      {{ message }}
+    </div>
+    <span class="guide">ㄴ console: app.message = 'new message'</span>
+
+    <h3>2.</h3>
+    <div id="app-2">
+      <span v-bind:title="message">
+        내 위에 마우스를 올리면 동적으로 바인딩 된 title을 볼 수 있습니다.
+      </span>
+    </div>
+    <span class="guide">ㄴ console: app2.message = 'new title'</span>
+
+    <h3>3.</h3>
+    <div id="app-3">
+      <p v-if="seen">app3.seen === true인 경우 보임</p>
+    </div>
+    <span class="guide">ㄴ console: app3.seen = false</span>
+
+    <h3>4.</h3>
+    <div id="app-4">
+      <ol>
+        <li v-for="todo in todos">
+          {{ todo.text }}
+        </li>
+      </ol>
+    </div>
+    <span class="guide">ㄴ console: app4.todos.push({ text: 'new element' })</span>
+
+    <h5>5.</h5>
+    <div id="app-5">
+      <p>{{ message }}</p>
+      <button v-on:click="reverseMessage">메시지 뒤집기</button>
+    </div>
+
+    <h6>6.</h6>
+    <div id="app-6">
+      <p>{{ message }}</p>
+      <input v-model="message">
+    </div>
+
+    <!-- 도움되는 콘솔 경고를 포함한 개발 버전 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 상용버전, 속도와 용량이 최적화 됨-->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          message: 'Hello Vue!'
+        }
+      })
+
+      var app2 = new Vue({
+        el: '#app-2',
+        data: {
+          message: '이 페이지는 ' + new Date() + ' 에 로드 되었습니다'
+        }
+      })
+
+      var app3 = new Vue({
+        el: "#app-3",
+        data: {
+          seen: true
+        }
+      })
+
+      var app4 = new Vue({
+        el: "#app-4",
+        data: {
+          todos: [
+            { text: 'Javascript 배우기' },
+            { text: 'Vue 배우기' },
+            { text: '무언가 멋진 것을 만들기 '}
+          ]
+        }
+      })
+
+      var app5 = new Vue({
+        el: '#app-5',
+        data: {
+          message: '안녕하세요! Vue.js!'
+        },
+        methods: {
+          reverseMessage: function () {
+            this.message = this.message.split('').reverse().join('')
+          }
+        }
+      })
+
+      var app6 = new Vue({
+        el: '#app-6',
+        data: {
+          message: '안녕하세요 Vue!'
+        }
+      })
+    </script>
+  </body>
+</html>
