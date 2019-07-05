@@ -50,17 +50,30 @@
     </div>
     <span class="guide">ㄴ console: app4.todos.push({ text: 'new element' })</span>
 
-    <h5>5.</h5>
+    <h3>5.</h3>
     <div id="app-5">
       <p>{{ message }}</p>
       <button v-on:click="reverseMessage">메시지 뒤집기</button>
     </div>
 
-    <h6>6.</h6>
+    <h3>6.</h3>
     <div id="app-6">
       <p>{{ message }}</p>
       <input v-model="message">
     </div>
+
+    <div id="app-7">
+      <ol>
+        <!-- todo-item 컴포넌트의 인스턴스 만들기 -->
+        <todo-item
+          v-for="item in groceryList"
+          v-bind:todo="item"
+          v-bind:key="item.id"
+        >
+        </todo-item>
+      </ol>
+    </div>
+    <!-- <a href='https://kr.vuejs.org/v2/guide/index.html#컴포넌트를-사용한-작성방법'>continue</a> -->
 
     <!-- 도움되는 콘솔 경고를 포함한 개발 버전 -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -73,21 +86,21 @@
         data: {
           message: 'Hello Vue!'
         }
-      })
+      });
 
       var app2 = new Vue({
         el: '#app-2',
         data: {
           message: '이 페이지는 ' + new Date() + ' 에 로드 되었습니다'
         }
-      })
+      });
 
       var app3 = new Vue({
         el: "#app-3",
         data: {
           seen: true
         }
-      })
+      });
 
       var app4 = new Vue({
         el: "#app-4",
@@ -98,7 +111,7 @@
             { text: '무언가 멋진 것을 만들기 '}
           ]
         }
-      })
+      });
 
       var app5 = new Vue({
         el: '#app-5',
@@ -110,12 +123,28 @@
             this.message = this.message.split('').reverse().join('')
           }
         }
-      })
+      });
 
       var app6 = new Vue({
         el: '#app-6',
         data: {
           message: '안녕하세요 Vue!'
+        }
+      });
+
+      Vue.component('todo-item', {
+        props: ['todo'],
+        template: '<li>{{ todo.text }}</li>'
+      });
+
+      var app7 = new Vue({
+        el: "#app-7",
+        data: {
+          groceryList: [
+            { id: 0, text: 'Vegetables' },
+            { id: 1, text: 'Cheese' },
+            { id: 2, text: 'Whatever else humans are supposed to eat' }
+          ]
         }
       })
     </script>
