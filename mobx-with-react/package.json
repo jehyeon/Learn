@@ -1,8 +1,10 @@
 {
   "name": "mobx-with-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-decorators": "^7.4.4",
     "mobx": "^5.11.0",
     "mobx-react": "^6.1.1",
     "react": "^16.8.6",
