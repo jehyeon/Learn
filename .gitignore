@@ -1,6 +1,12 @@
 # .DS_Store banished
 .DS_Store
 
+# virtualenv
+Include/
+Lib/
+Scripts/
+tcl/
+
 # Created by https://www.gitignore.io/api/node,unity,python,csharp,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,unity,python,csharp,visualstudiocode
 
