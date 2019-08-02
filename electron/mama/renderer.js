@@ -24,3 +24,21 @@ document.getElementById('todoForm').addEventListener('submit', evt => {
 const deleteTodo = e => {
     ipcRenderer.send('delete-todo', e.target.textContent);
 };
+
+ipcRenderer.on('todos', (event, todos) => {
+    const todoList = document.getElementById('todoList');
+
+    // Create todos html
+    const todoItems = todos.reduce((html, todo) => {
+       html += `<li class="todo-item">${todo}</li>`;
+
+       return html;
+    }, '');
+
+    //  Set list html to the todo items
+    todoList.innerHTML = todoItems;
+
+    todoList.querySelectorAll('.todo-item').forEach(item => {
+        item.addEventListener('click', deleteTodo);
+    });
+});

@@ -8,15 +8,17 @@ const TodoStore = require('./TodoStore');
 let mainWindow;
 
 // Create a new todo store name "Main Todos"
-const todosData = new TodoStore({name: 'Main Todos'});
+const todos = new TodoStore({name: 'Main Todos'});
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    show: false,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
     }
   });
 
@@ -24,7 +26,15 @@ function createWindow () {
   mainWindow.loadFile('index.html');
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools();
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  });
+  
+  mainWindow.once('show', () => {
+    mainWindow.send('todos', todos.todos)
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -34,6 +44,17 @@ function createWindow () {
     mainWindow = null
   });
 
+  ipcMain.on('add-todo', (event, todo) => {
+    const updatedTodos = todos.addTodo(todo).todos;
+
+    mainWindow.send('todos', updatedTodos);
+  });
+
+  ipcMain.on('delete-todo', (event, todo) => {
+    const updatedTodos = todos.deleteTodo(todo).todos;
+
+    mainWindow.send('todos', updatedTodos);
+  });
 }
 
 // This method will be called when Electron has finished
