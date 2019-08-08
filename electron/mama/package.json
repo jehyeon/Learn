@@ -14,12 +14,13 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "Jehyeon Lee",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^6.0.0"
   },
   "dependencies": {
+    "calendar-js": "^1.4.4",
     "electron-store": "^4.0.0"
   }
 }
