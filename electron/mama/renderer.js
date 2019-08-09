@@ -2,6 +2,7 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 const { ipcRenderer } = require('electron');
+const Calendar = require('./Calendar.js');
 
 document.getElementById('todoForm').addEventListener('submit', evt => {
     // Prevent default refresh functionality of forms
@@ -42,3 +43,5 @@ ipcRenderer.on('todos', (event, todos) => {
         item.addEventListener('click', deleteTodo);
     });
 });
+
+function calendar

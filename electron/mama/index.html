@@ -3,8 +3,37 @@
   <head>
     <meta charset="UTF-8">
     <title>Todos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
   </head>
   <body>
+
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Job</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Name">James</td>
+          <td data-label="Age">24</td>
+          <td data-label="Job">Engineer</td>
+        </tr>
+        <tr>
+          <td data-label="Name">Jill</td>
+          <td data-label="Age">26</td>
+          <td data-label="Job">Engineer</td>
+        </tr>
+        <tr>
+          <td data-label="Name">Elyse</td>
+          <td data-label="Age">24</td>
+          <td data-label="Job">Designer</td>
+        </tr>
+      </tbody>
+    </table>
+
     <h1>Todos</h1>
     <form id="todoForm">
       <input class="form-input" type="text" name="add-input" />
@@ -16,5 +45,6 @@
 
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>-->
   </body>
 </html>
