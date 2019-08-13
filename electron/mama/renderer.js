@@ -9,13 +9,16 @@ document.getElementById('todoForm').addEventListener('submit', evt => {
   evt.preventDefault();
 
   // Input on the form
-  const input = evt.target[0];
+  // const input = evt.target[0];
+  //
+  // // Send todo to main process
+  // ipcRenderer.send('add-todo', input.value);
+  //
+  // // Reset input
+  // input.value = '';
 
-  // Send todo to main process
-  ipcRenderer.send('add-todo', input.value);
-
-  // Reset input
-  input.value = '';
+  // temporary
+  ipcRenderer.send('openAddItemView');
 });
 
 // Functions
@@ -48,6 +51,11 @@ const renderCalendar = () => {
 
     return html;
   }, '');
+
+  // Add event
+  // item click -> Open Add item view
+
+  //
 
   thead.innerHTML = theadHTML;
   tbody.innerHTML = tbodyHTML;
