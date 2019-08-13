@@ -12,8 +12,8 @@ const todos = new TodoStore({name: 'Main Todos'});
 
 function createAddItemWindow() {
   addItemWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 300,
+    height: 400,
     show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -23,14 +23,10 @@ function createAddItemWindow() {
 
   addItemWindow.loadFile('addItem.html');
 
-  // addItemWindow.webContents.openDevTools();
+  addItemWindow.webContents.openDevTools();
 
   addItemWindow.once('ready-to-show', () => {
     addItemWindow.show();
-  });
-
-  addItemWindow.once('show', () => {
-    addItemWindow.send('items', items.items);
   });
 
   addItemWindow.on('closed', function () {

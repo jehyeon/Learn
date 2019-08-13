@@ -5,11 +5,15 @@
   <title>Add</title>
 </head>
 <body>
-  <form id="AddItem">
-    Name<input type="text" />
-    Color<select></select>
-    Price<input type="text" />
-    <input type="submit" />
+  <form id="add-item">
+    Name<input type="text" name="name"/>
+    Color<select name="color">
+      <option>black</option>
+      <option>white</option>
+    </select>
+    Price<input type="text" name="price"/>
+    <input id="submit" type="submit" />
   </form>
+  <script src="./addItem_renderer.js"></script>
 </body>
 </html>
