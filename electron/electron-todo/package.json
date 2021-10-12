@@ -9,7 +9,7 @@
   "author": "Lee, Jehyeon",
   "license": "ISC",
   "dependencies": {
-    "electron": "^4.0.6",
+    "electron": "^11.5.0",
     "electron-reload": "^1.4.0",
     "electron-store": "^2.0.0"
   }
